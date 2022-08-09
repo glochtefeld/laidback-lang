@@ -3,16 +3,18 @@ declaration ::= funDecl
             |   varDecl
             |   constDecl
             |   recordDecl
+            |   recordInstDecl
             |   unionDecl
             |   enumDecl
             |   listDecl
-            |   namespaceDecl
+            |   nsDecl
             |   statement
-recordDecl  |   "record" "{" ( IDENTIFIER "=" expression )* "}"
+recordDecl  |   "record" "{" IDENTIFIER ":" TYPE ( "," IDENTIFIER ":" TYPE )* ","? "}"
+recordInstDecl| "{" IDENTIFIER "=" expression ( "," IDENTIFIER "=" expression )* ","? "}"
 unionDecl   |   "union" "{" TYPE ( "|" TYPE )* "}"
 enumDecl    |   "enum" "{" ( IDENTIFIER ( "=" NUMBER )? )+ "}"
 listDecl    |   "[" ( expression ( expression "," )* )? "]"
-namespaceDecl|  "namespace" "{" declaration* "}"
+nsDecl      |  "namespace" "{" declaration* "}"
 funDecl     ::= "(" parameters? ")" "=>" declaration
 parameters  ::= IDENTIFIER ( "," IDENTIFIER )*
 varDecl     ::= "var" IDENTIFIER ( ":" TYPE )? ( "=" expression )? ";"
@@ -28,9 +30,10 @@ defaultStmt ::= expression "!?" statement
 block       ::= "{" declaration* "}"
 exprStmt    ::= expression ";"
 expression  ::= assignment
-assignment  ::= ( call "->" )? IDENTIFIER "=" assignment
             |   "error" IDENTIFIER
+            |   call "." call
             |   logic_or
+assignment  ::= ( call "->" )? IDENTIFIER "=" assignment
 
 logic_or    ::= logic_and ( "&&" logic_and )*
 logic_and   ::= equality ( "||" equality )*
