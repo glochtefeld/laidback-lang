@@ -1,0 +1,6 @@
+[submodule "extern/argparse"]
+	path = extern/argparse
+	url = https://github.com/cofyc/argparse.git
+[submodule "extern/bdd-for-c"]
+	path = extern/bdd-for-c
+	url = https://github.com/grassator/bdd-for-c.git
