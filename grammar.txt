@@ -7,17 +7,19 @@ declaration ::= funDecl
             |   unionDecl
             |   enumDecl
             |   listDecl
-            |   nsDecl
+            |   modDecl
             |   statement
 recordDecl  |   "record" "{" IDENTIFIER ":" TYPE ( "," IDENTIFIER ":" TYPE )* ","? "}"
 recordInstDecl| "{" IDENTIFIER "=" expression ( "," IDENTIFIER "=" expression )* ","? "}"
 unionDecl   |   "union" "{" TYPE ( "|" TYPE )* "}"
 enumDecl    |   "enum" "{" ( IDENTIFIER ( "=" NUMBER )? )+ "}"
 listDecl    |   "[" ( expression ( expression "," )* )? "]"
-nsDecl      |  "namespace" "{" declaration* "}"
-funDecl     ::= "(" parameters? ")" "=>" declaration
-parameters  ::= IDENTIFIER ( "," IDENTIFIER )*
-varDecl     ::= "var" IDENTIFIER ( ":" TYPE )? ( "=" expression )? ";"
+modDecl     |  "module" "{" declaration* "}"
+funDecl     ::= funTags? "let" IDENTIFIER = funPat ( "|" funPat)* 
+funTags     ::= ( "[|" | "「" IDENTIFIER ( "," IDENTIFIER )* ( "|]" | "」" )
+funPat      ::= parameters "=>" declaration
+parameters  ::= IDENTIFIER ( ":" TYPE )? ( WHITESPACE parameters )*
+varDecl     ::= "set" IDENTIFIER ( ":" TYPE )? ( "=" expression )? ";"
 constDecl   ::= "let" IDENTIFIER ( ":" TYPE )? "=" expression ";"
 statement   ::= exprStmt
             |   ifStmt
@@ -26,7 +28,7 @@ statement   ::= exprStmt
             |   returnStmt
 return Stmt ::= "return" expression? ";"
 ifStmt      ::= "if"? expression "??" statement ( "!!" statement )?
-defaultStmt ::= expression "!?" statement
+defaultStmt ::= expression ( "!?" | "?!" | "‽" ) statement
 block       ::= "{" declaration* "}"
 exprStmt    ::= expression ";"
 expression  ::= assignment
@@ -44,16 +46,16 @@ unary       ::= ( "!" | "-" ) unary
             |   call
 
 call        ::= primary ( "(" arguments? ")" | "->" IDENTIFIER )*
-arguments   ::= expression ( "," expression )*
+arguments   ::= expression ( WHITESPACE expression )*
 primary     ::= NUMBER
             |   STRING
             |   "true"
             |   "false"
             |   "null"
             |   "(" expression ")"
-            |   sigil? IDENTIFIER
+            |   IDENTIFIER
+            |   "_"
             |   TYPE
-sigil       ::= "~" | "$" | "#" | "?"
 
 comment     ::= "//" | "/*" ... "*/"
-docstring   ::= "--" | "---" ... "---"
+docstring   ::= "--" | "---" ...  
