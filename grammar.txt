@@ -57,5 +57,6 @@ primary     ::= NUMBER
             |   "_"
             |   TYPE
 
+IDENTIFIER  ::= letter ( letter | digit | _ | - )* ( letter | digit )+
 comment     ::= "//" | "/*" ... "*/"
 docstring   ::= "--" | "---" ...  
